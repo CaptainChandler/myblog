@@ -1,0 +1,61 @@
+
+.form-profile {
+  max-width: 500px;
+  padding: 15px;
+  margin: 10 auto;
+}
+
+
+
+
+.form-profile input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  height: 30px;
+  width: 60%;
+}
+
+.form-profile input[type="text"] {
+  margin-bottom: 1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  height: 30px;
+  width: 60%;
+}
+
+.form-profile input[type="tel"] {
+  margin-bottom: 1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  height: 30px;
+  width: 60%;
+}
+
+.form-profile input[type="number"] {
+  margin-bottom: 1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  height: 30px;
+  width: 60%;
+}
+
+.form-profile textarea {
+  margin-bottom: 1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  width: 60%;
+}
+
+.form-profile input[type="url"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  height: 30px;
+  width: 140px;
+}
+.form-profile .lbl {
+  width: 20%;
+}
+
+
