@@ -1,0 +1,141 @@
+<%include header.html %>
+  
+  <!-- ------------------------------------------ -->
+  <link href="assets/css/jquery-ui.min.css" rel="stylesheet">
+  <link href="assets/css/jquery-ui.theme.min.css" rel="stylesheet">
+  <link href="assets/css/ui.jqgrid-bootstrap-ui.css" rel="stylesheet">
+  <link href="assets/css/ui.jqgrid.css" rel="stylesheet">
+  <script type="text/ecmascript" src="assets/js/vendor/jquery.min.js"></script> 
+  <script type="text/ecmascript" src="assets/jqgrid/i18n/grid.locale-en.js"></script>
+  <script type="text/ecmascript" src="assets/jqgrid/jquery.jqGrid.min.js"></script>
+  
+
+  <div class="container-fluid">
+    <div class="row">  
+        <%include left.html %>
+      <!-- content start -->
+      <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <h1 class="page-header">新文章</h1>         
+            <div>                
+                <a class="btn btn-default" href="/compose">写新文章</a>
+            </div>
+        <!-- content start -->
+        <div >         
+          <table id="jqGrid" ></table> 
+          <div id="jqGridPager"></div>           
+      </div>    
+      </div>
+    </div>
+  </div>
+    <script>
+      $.jgrid.defaults.styleUI = "Bootstrap";
+    </script>
+    <script type="text/javascript"> 
+        $(document).ready(function () {
+
+          $.ajax({
+            url: "/bloglist/getArticles",
+            type: "post",
+            DATATYPE: "json",
+            success: function (data) {
+
+              var tmp = data.result;
+            
+
+              for(i=0; i<tmp.length; i++){
+                var posttime = new Date(tmp[i].ctime);
+                var updtime = new Date(tmp[i].utime);
+                
+                tmp[i].ctime = formatTime(posttime);
+
+                tmp[i].utime = formatTime(updtime);
+              }
+              
+              $("#jqGrid").jqGrid({                
+                data:data.result,
+                datatype: "local",
+                colModel: [
+                    { label:"SUBJECTID", name: 'subjectid', hidden: true },
+                    { label:"标题", name: 'subject', width: 250, 
+                      formatter:editLink },
+                    { label:"发表时间", name: 'ctime', width: 130 },
+                    { label:"最终更新", name: 'utime', width: 130 },
+                    { label:"操作", name: 'action', width: 150,
+                      formatter: editAction },
+                    { label:"是否可见", name: 'visible', hidden: true }
+                ],
+                viewrecords: true,    //是否在浏览导航栏显示记录总数
+                height: 250,
+                rowNum: 10, //每页显示记录数
+                pager: "#jqGridPager",
+                autowidth: false,
+                rownumbers: true,
+                caption: "",
+                altRows:true, //设置为交替行表格,默认为false
+                jsonReader : { 
+                  root: "page.list", 
+                  page: "page.currPage", 
+                  total: "page.totalPage", 
+                  records: "page.totalCount" },
+              });
+
+              
+            },
+            error: function(){
+            },
+          });
+
+          function formatTime(str){
+            return str.getFullYear() + "/" 
+                              + fillZero(str.getMonth())  + "/" 
+                              +  fillZero(str.getDay())  + " " 
+                              +  fillZero(str.getHours())  + ":" 
+                              +  fillZero(str.getMinutes())  + ":" 
+                              +  fillZero(str.getSeconds());
+          }
+
+          function fillZero(str){
+            return ("00" + str).slice(-2);
+          }
+
+          function editLink(cellValue, options, rowObject, action)
+          {
+            
+            return "<a href='javascript: window.location.href=\"/blogdetail?subjectid=" + rowObject.subjectid+ "\";' style='color:blue;'>" + cellValue+ "</a>";
+          }
+
+          function editAction(cellValue, options, rowObject, action)
+          {
+            if(rowObject.visible == 1){
+              return "<a href='javascript: window.location.href=\"/updblog?subjectid=" 
+                + rowObject.subjectid
+                + "\";' style='color:gray;'>编辑</a> | <a href='javascript: window.location.href=\"/delblog?subjectid=" 
+                + rowObject.subjectid
+                + "\";' style='color:gray;'>删除</a> | <a href='javascript: window.location.href=\"/hideblog?subjectid=" 
+                + rowObject.subjectid
+                + "&visible="
+                + 0
+                + "\";' style='color:gray;'>设为私密</a>";
+            }
+            else {
+              return "<a href='javascript: window.location.href=\"/updblog?subjectid=" 
+                + rowObject.subjectid
+                + "\";' style='color:gray;'>编辑</a> | <a href='javascript: window.location.href=\"/delblog?subjectid=" 
+                + rowObject.subjectid
+                + "\";' style='color:gray;'>删除</a> | <a href='javascript: window.location.href=\"/hideblog?subjectid=" 
+                + rowObject.subjectid
+                + "&visible="
+                + 1
+                + "\";' style='color:gray;'>设为公开</a>";
+            }
+            
+          
+          }
+
+          
+        });
+        
+   </script>
+    
+    </body>
+    </html>

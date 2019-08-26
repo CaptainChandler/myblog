@@ -1,0 +1,173 @@
+<%include header.html %>
+<link href="assets/css/profile.css" rel="stylesheet">
+<div class="container-fluid">
+    <div class="row">  
+        <%include left.html %>
+      <!-- content start -->
+      <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <h1 class="page-header">我的资料 / Profile</h1>    
+          <form name="profileForm"  class="form-profile" action="/profile" method="post" onsubmit="return checkForm()">
+            <div>
+              <label for="domainname" >域名 / Domain</label><input id="bkfordomainname" name="bkfordomainname" style="display: none"/>
+              <div>
+                <label>http://localhost:3000/space/</label><input style="width: 140px;" autocomplete="off" <%= editable %> id="domainname" name="domainname"  value=<%= session.profile.domainname %>  > 
+              <small>※设定后不能修改</small>
+              </div>
+              <div>
+                  <small><label id="msgfordomainname" style="color: red"></label></small>
+              </div>
+            </div>
+
+            <div>
+              <label for="blogname" >博客名 / Blogname</label>
+              <div>
+                <input style="width: 140px;"  type="text" id="blogname" name="blogname"  value=<%= session.profile.blogname %>  >               
+              </div>
+              <div>
+                <small><label id="msgforblogname" style="color: red"></label></small>
+            </div>
+            </div>
+
+            <div>
+              <label for="username" >呢称 / Nickname</label>
+              <div>
+                <input type="text" id="username" name="username" value=<%= session.nickname %>>
+              </div>
+            </div>
+
+            <div>
+              <label for="useremail" >电子邮件 / Email</label>
+              <div >
+                <input type="email" id="useremail" name="useremail"  value=<%= session.profile.useremail %>>                
+              </div>
+            </div>
+
+            <div>
+              <label for="userphone" >电话 / Telephone</label>
+              <div>
+                <input type="tel" id="userphone" name="userphone" value=<%= session.profile.userphone %>>
+              </div>
+            </div>
+
+            <div>
+              <label for="userweibo">微博 / Twitter</label>
+              <div>
+                <input type="text" id="userweibo" name="userweibo" value=<%= session.profile.userweibo %>>
+              </div>
+            </div>
+
+            <div>
+              <label for="userintro" >简介 / Intro</label>
+              <div >
+                <textarea  rows="5" id="userintro" name="userintro"><%= session.profile.userintro %></textarea>                
+              </div>
+            </div>
+
+            <div>
+              <div>
+                <input type="submit"  value="保存修改" />
+              </div>
+            </div>
+          </form>
+    </div>
+  </div>
+  <!-- content end -->
+</div>
+
+<%include js.html %>
+<script>
+$(document).ready(function(){
+  $("#bkfordomainname").val($("#domainname").val());
+  $("#domainname").blur(function(){
+    $("#bkfordomainname").val($("#domainname").val());
+    checkDomain();
+  }); 
+})
+
+function checkDomain(){
+  var domainname = $("#domainname").val();
+    //匹配任何不可见字符，包括空格、制表符、换页符等等。等价于[ \f\n\r\t\v]。
+    //匹配前面的子表达式一次或多次(大于等于1次）。例如，“zo+”能匹配“zo”以及“zoo”，但不能匹配“z”。+等价于{1,}。
+    var afterStr = domainname.replace(/\s+/g, "");
+
+    if(afterStr == ""){
+      $("#msgfordomainname").html("");
+      return true;
+    }
+
+    var len1 = domainname.length;
+    var len2 = afterStr.length;
+
+    if(len2<len1){
+      $("#msgfordomainname").html("*域名不能有空格");
+      return false;
+    }
+
+    var partten = new RegExp(/^[a-zA-Z]{1,20}$/) 
+    if(!partten.test(afterStr)){
+      $("#msgfordomainname").html("*域名只能是20位以内的英文字母");
+      return false;
+    }
+
+    $.ajax({
+      url: "/profile/ifDomainExists",
+      type: "post",
+      dataType: "json",
+      data: {domainname: domainname},
+      async: false,
+      success: function(data){
+        if(data.result.flg == "1"){
+          $("#msgfordomainname").html("*域名已被占用");
+          return false;
+        }
+        else{
+          $("#msgfordomainname").html("");
+          
+        }
+      }
+    });  
+
+    return true;
+}
+
+function checkBlogname(){
+  var domainname = $("#domainname").val();
+  var blogname = $("#blogname").val();
+
+  if(domainname != "" && blogname !=""){
+    return true;  
+  }
+  else if(domainname == "" && blogname !=""){
+    $("#msgfordomainname").html("*请设置域名");
+    return false;
+  }
+  else if(domainname != "" && blogname ==""){
+    $("#msgforblogname").html("*请设置博客名");
+    return false;
+  }
+  $("#msgforblogname").html("");
+  $("#msgfordomainname").html("");
+  return true;
+}
+
+function checkForm(){
+  
+  if($("#domainname").attr("disabled") == "disabled"){
+    var check =  checkBlogname();
+  } else {
+    var check = checkDomain() && checkBlogname();
+  }
+  
+
+  if(check){
+    return true;
+  }
+  else{
+    return false;
+  }
+}
+</script>
+
+
+</body>
+</html>

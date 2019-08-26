@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%include blogheader.html %>
+
+    <div class="container">
+
+      <div class="blog-header">
+        <h1 class="blog-title"><%= session.blogname %></h1>        
+      </div>
+
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+          <!-- blog post -->
+          <div id="blogpost">
+              <div class="col-md-12 panel" style="box-shadow: 0 1px 8px 1.5px rgba(0, 0, 0, 0.35), 0 20px 70px 8px rgba(0, 0, 0, 0.25);">
+                  <div class="padding-huge" style="padding: 15px;">
+                    <div>
+                        <h3>
+                            <span><%= session.detail.subject %></span></h3>   
+                            <input type="text" id="subjectid" name="subjectid" value=<%= session.subjectid %> style="display:none" />
+                            <p style="line-height: 1.2;"><font size="2" color="gray"><%=session.detail.ctime %>  by  <a href="#"><%=session.detail.author %></a></font></p>
+                            <!-- <p><%= session.detail.postbody %></p> -->
+                            <pre class="pre"><div id="postbody"></div></pre>
+                            <script>
+                              $(function(){
+                                
+                                var tmp = document.createElement('div');
+                                tmp.innerHTML = "<%= session.detail.postbody %>";                              
+                                cnt = tmp.innerText || tmp.textContent;
+                                tmp = null;
+                                document.getElementById("postbody").innerHTML=cnt;
+                              })
+                            </script>
+                    </div>
+                    <div id="visible" style="color: gray; font-size:10px;text-align:right"></div>
+                    <script>
+                      $(function(){
+                        var flg = "<%= session.detail.visible %>";
+
+                        if(flg == 0) {
+                          $("#visible").html("<此为私密文章>");
+                        }
+                      });
+                    </script>
+                    <div >
+                        <p><font size="2" color="gray">
+                         评论(<label id="commentamount"></label>)</font></p>
+                          <script>
+                            $(window).load(function(){
+                              loadCommentAmount();
+                            });
+
+                            function loadCommentAmount(){
+
+                              $("#commentamount").html("");
+                              $.ajax({
+                                "url": "/comment/getCommentAmount?subjectid=<%=session.subjectid%>",
+                                "type"  : "post",
+                                "async": false,
+                                success: function(result) {
+                                  $("#commentamount").html(result);
+                                }
+                                
+                              }); 
+                            }
+                          </script>
+                    </div>
+                    
+                    <div style="border-top: 1px solid #e5e5e5; padding: 15px;">
+                    </div>
+
+                    <div class="col-sm-12">
+                        <h5><span>评论</span></h5> 
+                    </div>
+                    <div id="uncommentable" class="col-sm-12">
+                      <div style="height:80px; width: 100%; border: 1px solid; font-size: 12px; text-align: center; line-height:70px;">
+                        <span >评论请先<a href="/login">登录</a>|<a href="/register">注册</a></span>
+                      </div>
+                      <div style="height: 40px"></div>
+                    </div>
+                    <div id="commentable" class="col-sm-12">
+                        <form>
+                            <div>
+                              <textarea class="col-sm-12" name="commentbody" id="commentbody" rows="4" ></textarea></div>
+                            <div class="col-sm-12" style="height:10px"></div>
+                            <div class="col-sm-12">
+                              <input class="btn btn-primary pull-right" type="button" name="btnComment" value="发表" id="btnComment" onclick="postComment();"/></div>
+                          </form>
+                    </div>
+                    <script>
+                      $(window).load(function(){
+                        var flg = "<%= session.login%>";
+                        if(flg==="1"){
+                          document.getElementById("uncommentable").style.display = "none";
+                          document.getElementById("commentable").style.display = "inline";
+                        }else{
+                          document.getElementById("uncommentable").style.display = "inline";
+                          document.getElementById("commentable").style.display = "none";
+                        }
+                      })
+                    </script>                    
+                    <div id="commentpost" class="col-sm-12">
+                    </div>
+                  </div>
+               </div> 
+          </div>
+
+         
+          <script type="text/template" id="model">           
+            <div> 
+                <p style="line-height: 1.2;"><font size="2" color="gray">{{=commentuser}} | {{=ctime}}  </font></p>
+    
+                <pre class="pre">{{=commentbody}}</pre>
+           </div>
+          </script>
+
+          <script type="text/javascript">
+          $(window).load(function(){
+            getPage();
+          });    
+            function getPage() {
+              var commentpost = $("commentpost");
+              var compiled = _.template($("#model").html());
+              var subjectid = '<%= session.subjectid %>';
+            
+              //将现在的页面内容清除
+              $("#commentpost").html("");
+              $.ajax({
+                  "url": "/comment/comment?subjectid=" + subjectid,
+                  "type": "post",
+                  "datatype": "json",
+                  "async": false,
+                  "success": function (data) {
+                      //result是一个数组
+                      
+                      iterator(0);
+                      //迭代器
+                      function iterator(i) {
+                          if (i == data.result.length) {
+                              //在这里书写请求完毕之后做的事情
+                              return;  //不用继续迭代了
+                          }                          
+                         
+                          var htmlstring = compiled(data.result[i]);
+                          //添加DOM
+                          $("#commentpost").append($(htmlstring));
+                          iterator(i + 1);
+                      }
+                  }
+              });
+            }
+
+            function postComment(){
+              var commentbody = $("#commentbody").val();
+
+              if(commentbody == ""){
+                alert("评论不能为空");
+                return;
+              }
+
+              $.ajax({
+                "url": "/comment/postComment",
+                "type": "post",
+                "async": false,
+                "datatype": "json",
+                "data": {"commentbody": commentbody},
+                success: function(data){
+                  getPage();                     
+                }
+              });
+
+              $("#commentbody").val("");
+              loadCommentAmount();
+            }
+
+          </script>
+          <!-- blog post -->
+
+        </div><!-- /.blog-main -->
+    </div><!-- /.container -->
+
+    <footer class="blog-footer">
+      <p>@YAHAHA</p>
+    </footer>
+
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!-- Bootstrap core JavaScript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="assets/js/vendor/jquery.min.js"></script>
+        
+        <script src="dist/js/bootstrap.min.js"></script>
+        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+        <script src="assets/js/ie10-viewport-bug-workaround.js"></script>
+
+        <script type="text/javascript">
+                $(window).load(function(){
+                  var domainname = "<%= session.mydomainname%>";
+                  if(domainname == ""){
+            
+                    document.getElementById("liformyblog").style.display = "none";
+                  }
+                  else{
+                    document.getElementById("liformyblog").style.display = "inline";
+                  }
+                });
+              </script>

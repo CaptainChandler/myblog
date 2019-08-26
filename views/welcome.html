@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1><%= message %></h1>
+    <h2><a href="#">你将会在3秒内跳转</a></h2>
+  </body>
+  <script type="text/javascript">
+  window.onload = function(){
+      window.setTimeout("doRender()", 3000);
+  }
+
+  function doRender(){
+    window.location.href = "/mypage";
+  }
+
+</script>
+</html>

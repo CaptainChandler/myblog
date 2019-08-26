@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <link rel="alternate icon" type="image/png" href="/assets/i/favicon.png">
+  <link rel="stylesheet" href="/assets/css/amazeui.min.css"/>
+  <style>
+    .header {
+      text-align: center;
+    }
+    .header h1 {
+      font-size: 200%;
+      color: #333;
+      margin-top: 30px;
+    }
+    .header p {
+      font-size: 14px;
+    }
+  </style>
+  <title><%= title %></title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" /> 
+</head>
+<body>  
+<div>
+  <br>
+  <br>
+</div>
+<div class="am-g">
+  <div class="am-u-lg-6 am-u-md-8 am-u-sm-centered">
+    <h1>小乖乖们，快注册吧~~~</h1>
+    <hr>  
+       <span name="" id="errpad" style="color:red; font-size: 10" value=""></span>
+    <br>
+    <form name="loginForm" method="post" class="am-form" action="/register" onsubmit="return doValidate()">
+      <label for="username">呢  称:</label>
+      <input type="text" name="username" id="username" value="" required>
+      <label id="errForUsername" style="color:red" value=""></label>
+      <br>
+      <label for="password">暗  号:</label>
+      <input type="password" name="password" id="password" value="" placeholder="请输入暗号" required>
+      <label id="errForPassword" style="color:red" value=""></label>
+      <br>
+      <label for="password2">确认暗号:</label>
+      <input type="password" name="password2" id="password2" value="" placeholder="请再次输入暗号" required>
+      <label id="errForPassword2" style="color:red" value=""></label>
+      <br>   
+      <div class="am-cf">
+        <input type="submit" id="btnLogin" name="btnLogin" value="登 录" class="am-btn am-btn-primary am-btn-sm am-fl">
+        <input type="submit" name="btnFoget" value="忘记暗号 ^_^? " class="am-btn am-btn-default am-btn-sm am-fr">
+      </div>
+    </form>
+    <hr>
+    <p>© 2019 YAHAHA</p>
+  </div>
+</div>
+</body>
+<script src="https://cdn.staticfile.org/jquery/2.0.0/jquery.min.js">
+</script>
+<!-- <script type="text/javascript" defer=true> -->
+  
+
+  
+  <script>
+  $(document).ready(function(){
+
+    $("#username").blur(function(){
+      var nickname = $("#username").val();
+      
+      if(chkUsername() == false) {
+        return;
+      }
+
+      $.ajax({
+          type: "post",
+          url: "http://localhost:3000/register/ifexist",
+          dataType: "json",
+          data:{ username: nickname},
+          success: function(data){
+              //接受返回的数据，前端判断采取的动作
+              if(data){
+                  if(data.message == "false"){
+                    $("#errForUsername").text("*呢称已被占用");
+               
+                  }
+              } 
+          }
+      });
+    });
+
+    // $("form").submit(function(){
+      
+    //   if(chkUsername() == false) {
+    //     return false;
+    //   }
+    //   if(chkPassword() == false) {
+    //     return false;
+    //   }
+    //   // alert ("ok");
+    //   $.ajax({
+    //       type: "post",
+    //       url: "/register/register",
+    //       data: {},
+    //       success: function(data) {
+    //         // if(data) {
+    //         //   if(data.message == "true") {
+                
+    //           }
+    //         });  
+          
+    // });
+  });
+
+  //validate: for username
+  function chkUsername() {
+    var username = document.getElementById("username").value;
+    var errpad = document.getElementById("errForUsername");
+    var patrn = new RegExp(/^[a-zA-Z]{1}([a-zA-Z0-9_]){2,19}$/);
+
+    //null
+    if(username == "" || username == null) {
+      errpad.innerHTML = "*呢称未入力";
+      return false;
+    }
+    else if(patrn.test(username) == false){
+      errpad.innerHTML = "*呢称必须以字母开头，长度为3-20位，可以由数字、字母、下划线组成";
+      return false;
+    }
+    errpad.innerHTML = "";
+    return true;
+  } 
+
+  //validate: for Password
+  function chkPassword() {
+
+    var password = document.loginForm.password.value;
+    var password2 = document.loginForm.password2.value;
+    var errpad = document.getElementById("errForUsername");
+
+    if(password == "") {
+      errpad.innerHTML = "*暗号未入力";
+      return false;
+    }
+    else if(password2 == "") {
+      errpad.innerHTML = "*确认暗号未入力";
+      return false;
+    }
+    else if(password2 != password) {
+      errpad.innerHTML = "*确认暗号与暗号不一致";
+      return false;
+    }
+
+    return true;
+  }
+
+ function chkPassword() {
+
+    var password = document.loginForm.password.value;
+    var password2 = document.loginForm.password2.value;
+    var errpad = document.getElementById("errForPassword");
+    var errpad2 = document.getElementById("errForPassword2");
+
+    if(password == "") {
+      errpad.innerHTML = "*暗号未入力";
+      return false;
+    }
+    else if(password2 == "") {
+      errpad2.innerHTML = "*确认暗号未入力";
+      return false;
+    }
+    else if(password2 != password) {
+      errpad2.innerHTML = "*确认暗号与暗号不一致";
+      return false;
+    }
+    errpad.innerHTML = "";
+    return true;
+  }
+
+  function doValidate() {
+    var check = chkUsername() && chkPassword();
+    return check;
+  }
+</script>
+<!-- </script> -->
+
+</html>

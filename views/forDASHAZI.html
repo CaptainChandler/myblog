@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+  </head>
+
+    <body>
+        <div style="width: 90%; border: 2px solid;" align="center">
+            <div style="float: left; width:35%; height:400px; margin-right: 20px; box-shadow: 0 1px 8px 1.5px rgba(0, 0, 0, 0.35), 0 20px 70px 8px rgba(0, 0, 0, 0.25);">
+                <div align="center"><h3>INPUT</h3></div>
+                <!-- <div style="float: left; margin-left:20px;  margin-bottom: 20px; width:10px;">
+                    <h5>NO.</h3>
+                    <label>1.</label> <br/><br/>
+                    <label>2.</label> <br/><br/>
+                    <label>3.</label> <br/><br/>
+                    <label>4.</label> <br/><br/>
+                    <label>5.</label> <br/><br/>
+                </div>
+                <div style="float: left; margin-left:20px;  margin-bottom: 20px; width:40px">
+                    <h5>Difficulty</h3>
+                    <input type="text" id="difficulty1" name="difficulty1" > <br/><br/>
+                    <input type="text" id="difficulty2" name="difficulty2" width="10px"> <br/><br/>
+                    <input type="text" id="difficulty3" name="difficulty3" width="10px"> <br/><br/>
+                    <input type="text" id="difficulty4" name="difficulty4" width="10px"> <br/><br/>
+                    <input type="text" id="difficulty5" name="difficulty5" width="10px"> <br/>
+                </div>
+                <div style="float: left;margin-left:20px; margin-bottom: 20px;  width:40px">
+                    <h5>Result</h3>
+                    <input type="text" id="result1" name="result1" > <br/><br/>
+                    <input type="text" id="result2" name="result2" > <br/><br/>
+                    <input type="text" id="result3" name="result3" > <br/><br/>
+                    <input type="text" id="result4" name="result4" > <br/><br/>
+                    <input type="text" id="result5" name="result5" > <br/>
+                </div>
+                <div style="float: left;margin-left:20px; margin-bottom: 20px; width:40px">
+                    <h5>SubjectNo.</h3>
+                    <input type="text" id="SN1" name="SN1" > <br/><br/>
+                    <input type="text" id="SN2" name="SN2" > <br/><br/>
+                    <input type="text" id="SN3" name="SN3" > <br/><br/>
+                    <input type="text" id="SN4" name="SN4" > <br/><br/> 
+                    <input type="text" id="SN5" name="SN5" > <br/>
+                </div> -->
+                <br><br>
+                <div style="float: left;margin-bottom: 20px; width:90%">
+                    <form id="inputform" name="inputform" >
+                    <span  style="margin-left: -240px">数据源：</span><br>
+                    <textarea id="inputdata" name="inputdata" rows="10" cols="35"></textarea><br><br>
+                    <div style="text-align: left;width:75%;font-size: 12px" >
+                        <p>*请以【题目难度/答对与否/题号】的顺序来输入数据，间隔符为[,]。<br> 例：0.012,1,07123,0.342,0,07823</p>
+                        <!-- <small style="margin-left: 20px;width:75%;" >*请以【题目难度/答对与否/题号】的顺序来输入数据，</small>
+                        <small style="margin-left: 25px;width:75%;" > 间隔符为[,].</small><br>
+                        <small style="margin-left: 25px;width:75%;" >例：0.012,1,07123,0.342,0,07823</small> -->
+                    </div>
+                    <input type="submit" id="btnSubmit" name="btnSubmit" value="提 交" onclick="doSubmit()">
+                    </form>
+                </div>
+            </div>
+            <script language="javascript">
+                    function doSubmit()
+                    {
+                        //获取接受返回信息层
+                        var msg = document.getElementById("msg");
+                    
+                        //获取表单对象和用户信息值
+                        var f = document.user_info;
+                        var userName = f.user_name.value;
+                        var userAge   = f.user_age.value;
+                        var userSex   = f.user_sex.value;
+                    
+                        //接收表单的URL地址
+                        var url = "/cgi-bin/getuser.py";
+                    
+                        //需要POST的值，把每个变量都通过&来联接
+                        var postStr   = "user_name="+ userName +"&user_age="+ userAge +"&user_sex="+ userSex;
+                    
+                        //实例化Ajax
+                        //var ajax = InitAjax();
+                    
+                    
+                        var ajax = false;
+                        //开始初始化XMLHttpRequest对象
+                        if(window.XMLHttpRequest) 
+                        {     //Mozilla 浏览器
+                            ajax = new XMLHttpRequest();
+                            if (ajax.overrideMimeType) 
+                            {    //设置MiME类别
+                                ajax.overrideMimeType("text/xml");
+                            }
+                        }
+                        else if (window.ActiveXObject) 
+                        {     // IE浏览器
+                            try 
+                            {
+                                ajax = new ActiveXObject("Msxml2.XMLHTTP");
+                            } 
+                            catch (e) 
+                            {
+                                try 
+                                {
+                                    ajax = new ActiveXObject("Microsoft.XMLHTTP");
+                                } 
+                                catch (e) {}
+                             }
+                        }
+                        if (!ajax) 
+                        {     // 异常，创建对象实例失败
+                            window.alert("不能创建XMLHttpRequest对象实例.");
+                            return false;
+                        }
+                    
+                        //通过Post方式打开连接
+                        ajax.open("POST", url, true);
+                    
+                        //定义传输的文件HTTP头信息
+                        ajax.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+                    
+                        //发送POST数据
+                        ajax.send(postStr);
+                    
+                        //获取执行状态
+                        ajax.onreadystatechange = function() 
+                        { 
+                               //如果执行状态成功，那么就把返回信息写到指定的层里
+                               if (ajax.readyState == 4 && ajax.status == 200) 
+                            { 
+                                msg.innerHTML = ajax.responseText;
+                                //msg.innerHTML = ajax.return; 
+                               } 
+                        } 
+                    }
+                    </script>
+            <div style="float: left; width:30%;height:400px;  margin-right: 20px; box-shadow: 0 1px 8px 1.5px rgba(0, 0, 0, 0.35), 0 20px 70px 8px rgba(0, 0, 0, 0.25);">
+                <div align="center"><h3>PARAMETERS</h3></div>   <br/><br/>        
+                <div style="margin-bottom: 20px; margin-left:20px; float: left;">
+                    <div style="height: 60px;">
+                        <span style="margin-left: -70px">计算次数：</span><br/>
+                        <input type="text" id="calculations" name="calculations" value="3000">
+                    </div>
+                    <div style="height: 80px;">
+                        <span style="margin-left: -90px">学习率：</span><br/>
+                        <input type="text" id="xuexilv" name="xuexilv" value="0.05"><br>
+                        <small style="margin-left: -90px">(0.1~0.001)</small><br/><br/>
+                    </div>
+                    <div style="height: 80px;">
+                        <span style="margin-left: -30px">步进值最小门限：</span><br/>
+                        <input type="text" id="step" name="step" value="0.000001"> <br>  
+                        <small style="margin-left: -40px">(0.0001~0.000001)</small><br/><br/>
+                    </div>
+                   
+                </div>    
+            </div>
+            <div style="float: left; width:30%; height:400px; box-shadow: 0 1px 8px 1.5px rgba(0, 0, 0, 0.35), 0 20px 70px 8px rgba(0, 0, 0, 0.25);">
+                <div align="center"><h3>RESULT</h3></div>  
+                <br/><br/>         
+                <div style="float: left;margin-bottom: 20px; margin-left:20px; ">
+                    <div style="height: 80px;">
+                        <span style="margin-left: -170px; ">学生能力值：</span><br/>
+                        <input type="text" id="ability" name="ability" disabled="disabled" style="margin-left: -110px; "><br>
+                    </div>
+                    <div style="height: 120px;">
+                        <span style="margin-left: -180px">错误信息：</span><br/>
+                        <textarea id="errmsg" name="errmsg" rows="10" cols="30" ></textarea><br>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </body>
+</html>

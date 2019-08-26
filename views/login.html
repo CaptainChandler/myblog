@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="assets/i/bootstrap/favicon.ico">
+
+    <title>Signin Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="dist/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="assets/css/ie10-viewport-bug-workaround.css" type="text/css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="assets/css/signin.css" type="text/css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="assets/js/ie-emulation-modes-warning.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="container">
+      
+      <form class="form-signin" id="loginForm" method="post"  action="/login" onsubmit="return doValidate()">
+        <h3 class="form-signin-heading" style="text-align: center">小乖乖，快登录吧~~~</h3>
+        <div class="inputdiv">
+        <label for="username" class="lbl">呢  称:</label>
+      
+        <input type="text" name="username" id="username" value="" required autofocus>
+      
+     
+        <label id="errForUsername" style="color:red" value=""></label>
+      <br>      
+        <label for="password" class="lbl">暗  号:</label>
+        <input type="password" name="password" id="password" value="" placeholder="请输入暗号" required>      
+      <label id="errForPassword" style="color:red" value=""></label>
+      <br>
+    </div>
+        <button class="btn  btn-primary btn-block" type="submit" id="btnLogin" name="btnLogin" >登 录</button>
+        <div style="text-align: right"><small ><a href="/register">还没有帐号>></a></small></div>
+      </form>
+      
+
+    </div> <!-- /container -->
+
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+  <script src="assets/js/vendor/jquery.min.js">
+  </script>
+    
+    <script>
+    
+    //validate: for username
+    function chkUsername() {
+      var username = document.getElementById("password").value;
+      var errpad = document.getElementById("errForUsername");
+     
+  
+      //null
+      if(username == "" || username == null) {
+        errpad.innerHTML = "*呢称未入力";
+        return false;
+      }
+     
+      errpad.innerHTML = "";
+      return true;
+    } 
+  
+    //validate: for Password
+    function chkPassword() {
+  
+      var password = document.getElementById("errForUsername");
+      
+      var errpad = document.getElementById("errForUsername");
+  
+      if(password == "") {
+        errpad.innerHTML = "*暗号未入力";
+        return false;
+      }
+  
+      return true;
+    }
+  
+   
+    function doValidate() {
+      var check = chkUsername() && chkPassword();
+      return check;
+    }
+  
+    function doRender(){
+      window.location.href = "/register";
+    }
+  </script>
+</html>

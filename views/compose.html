@@ -1,0 +1,86 @@
+<%include header.html %>
+<script src="assets/js/wangEditor.js"></script>
+<div class="container-fluid">
+  <div class="row">  
+      <%include left.html %>
+    <!-- content start -->
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+      <h1 class="page-header">新文章</h1>
+      
+      <div class="col-sm-12" >
+              
+            <form name="composeForm" class="col-sm-12" method="post" action="/compose" >
+              <div class="col-sm-12"><label for="subject">标题:</label></div>
+              <div class="col-sm-12">
+              
+              <input class="col-sm-7" type="text" name="subject" id="subject" value="" required>
+              </div>
+            <div class="col-sm-12" ></div>
+            <div class="col-sm-12"><label for="editor">内容:</label></div>
+            <textarea id="postbody" name="postbody" style="display: none"></textarea> 
+            <div class="col-sm-10" id="editor">  
+                         
+              <!-- <textarea  name="editor" id="editor"   ></textarea> -->
+              <script type="text/javascript">
+                var E = window.wangEditor
+                var editor = new E('#editor')
+                // 打开DEBUG模式方便输出错误信息
+                editor.customConfig.debug = true;
+                editor.customConfig.onchange = function(html){
+                  $("#postbody").val(html);
+                }
+                // 配置服务器端地址
+                editor.customConfig.uploadImgServer = '/uploadImg';
+                // 统一前台以任何方式上传的图片名称
+                editor.customConfig.uploadFileName = 'updImg';
+                //图片大小限制为 5M
+                editor.customConfig.uploadImgMaxSize = 5 * 1024 * 1024;
+                // editor.customConfig.uploadImgShowBase64 = true;
+                
+                // 或者 var editor = new E( document.getElementById('editor') )
+                // 隐藏“网络图片”tab
+                // editor.customConfig.showLinkImg = false
+
+                //监听函数在上传图片的不同阶段做相应处理        
+                editor.customConfig.uploadImgHooks = {            
+                  success: function (xhr, editor, result) {                
+                    console.log('图片上传并返回结果,图片插入成功')            
+                  },            
+                  
+                  fail: function (xhr, editor, result) {                
+                    console.log('图片上传并返回结果，但图片插入错误')            
+                  },            
+                  error: function (xhr, editor) {                
+                    console.log('图片上传出错')            
+                  },           
+                  timeout: function (xhr, editor) {                
+                    console.log('图片上传超时')            
+                  },            
+                  customInsert: function (insertImg, result, editor) {                
+                    console.log(' 图片上传并返回结果');                
+                    var url = result.url[0];                
+                    insertImg(url)            
+                  }        
+                };                
+                editor.create()
+                editor.txt.html("");
+            </script>
+            </div>
+               
+              <div class="col-sm-8 text-center" style="margin-top: 20px">                                     
+                  <a class="btn btn-default" href="/bloglist">放弃</a>
+                  <!-- <input id="btnDraf" name="btnDraf" value="保存草稿"  class="btn btn-default" onclick="doclick() ">               -->
+                <input type="submit" name="btnSave" value="提交" class="btn btn-default"> 
+              </div>
+            </form>        
+      </div>
+    </div>
+  </div>
+  <!-- content end -->
+</div>
+
+<%include js.html %>
+
+</body>
+</html>
+

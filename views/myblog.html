@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%include blogheader.html %>
+    <div class="container">
+      <div class="blog-header">
+        <h1 class="blog-title"><%= session.blogname %></h1>
+        <!-- <p class="lead blog-description"><%= session.selfintro %></p> -->
+      </div>
+
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+          <!-- blog post -->
+          <div id="blogpost">
+
+          </div>
+          <script type="text/template" id="model">
+            <div class="col-md-12 panel" style="box-shadow: 0 1px 8px 1.5px rgba(0, 0, 0, 0.35), 0 20px 70px 8px rgba(0, 0, 0, 0.25);">
+              <div class="padding-huge" style="padding: 15px;">
+               <h3>
+               <!-- <span><a href="/myblog/getArticle?subjectid={{=subjectid}}">{{=subject}}</a></span></h3>    -->
+               <span><a href="javascript:window.location.href='/blogdetail?subjectid={{=subjectid}}';">{{=subject}}</a></span></h3>   
+               <input type="text" id={{=subjectid}} name={{=subjectid}} value={{=subjectid}}  style="display:none" />
+               <p style="line-height: 1.2;"><font size="2" color="gray">{{=ctime}}  by  <a href="#">{{=author}}</a></font></p>
+   
+               <pre class="pre">{{=postbody}}</pre>
+   
+               <div style="color: gray; font-size:10px;text-align:right">{{=visible}}</div>
+               <p><font size="2" color="gray">
+                <a class="" href="javascript:window.location.href='/blogdetail?subjectid={{=subjectid}}';" >评论({{=commentcount}})</a></font></p>
+              </div>
+           </div>
+          </script>
+
+          <script type="text/javascript">
+            // var blogpost = $("blogpost");
+            var compiled = _.template($("#model").html());
+            getPage(0);
+
+            function getPage(page) {
+              //将现在的页面内容清除
+              $("#blogpost").html("");
+              $.ajax({
+                  "url": "/myblog/getallarticles?page=" + page,
+                  "type": "post",
+                  "datatype": "json",
+                  "async": false,
+                  "success": function (data) {
+                      
+                      //result是一个数组
+                      //console.log(Array.isArray(result));
+                      iterator(0);
+                      //迭代器
+                      function iterator(i) {
+                          if (i == data.result.length) {
+                              //在这里书写请求完毕之后做的事情
+                              return;  //不用继续迭代了
+                          }
+                            
+                          $.ajax({
+                            "url": "/comment/getCommentAmount?subjectid=" + data.result[i].subjectid,
+                            "type"  : "post",
+                            "async": false,
+                            success: function(result) {
+                              data.result[i].commentcount=result;
+                            }                            
+                          }); 
+                          var posttime = new Date(data.result[i].ctime);
+                          // alert(posttime.Format("yyyy-MM-dd hh:mm:ss"));
+                          data.result[i].ctime =posttime.getFullYear() + "-" + fillZero(posttime.getMonth())+ "-" + 
+                                fillZero(posttime.getDay()) + " " + fillZero(posttime.getHours()) + ":" + 
+                                fillZero(posttime.getMinutes()) + ":" + fillZero(posttime.getSeconds());
+
+                          if(data.result[i].visible == 0) {
+                            data.result[i].visible = "<此为私密文章>";  
+                          }
+                          else {
+                            data.result[i].visible = "";
+                          }
+                          var htmlstring = compiled(data.result[i]);
+                          //添加DOM
+                          $("#blogpost").append($(htmlstring));
+                          iterator(i + 1);
+                      }
+                  }
+              });
+            }
+
+            function fillZero(str){
+              return ("00" + str).slice(-2);
+            }
+          </script>
+          <!-- blog post -->
+      
+      <nav>
+        <ul class="pagination">
+
+        </ul>
+      </nav>
+      <script type="text/javascript">
+        // 分页条的Ajax
+        $.get('/myblog/getAmount', function(result) {
+          var amount = parseInt(result);
+          // 总页数
+          pageamount = Math.ceil(amount / 5);
+          for (var i = 0; i < pageamount;i++) {
+            showpage = i+1;
+            $('.pagination').append("<li><a href='javascript:void(0);'>" + showpage + "</a></li>");
+          }
+          $(".pagination li:first").addClass("active");
+          // 监听
+          $(".pagination li").click(function() {
+            var page = $(this).index();
+            getPage(page);
+            $(this).addClass("active").siblings().removeClass("active");
+          });
+        });
+      </script>
+
+        </div><!-- /.blog-main -->
+
+        <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
+          <div class="sidebar-module sidebar-module-inset">
+            <h4>About</h4>
+            <pre style="border:0px;"><%= session.selfintro%></pre>
+          </div>
+          <div class="sidebar-module">
+            <h4></h4>
+            <ol class="list-unstyled">
+              
+            </ol>
+          </div>
+          <div class="sidebar-module">
+            <h4></h4>
+            <ol class="list-unstyled">
+              
+            </ol>
+          </div>
+        </div><!-- /.blog-sidebar -->
+
+      </div><!-- /.row -->
+
+    </div><!-- /.container -->
+
+    <footer class="blog-footer">
+      @YAHAHA
+    </footer>
+
+
+</body>>
+</html>
