@@ -662,10 +662,10 @@ var config = {
     uploadImgShowBase64: false,
 
     // 上传图片，server 地址（如果有值，则 base64 格式的配置则失效）
-    // uploadImgServer: '/upload',
+    uploadImgServer: '/uploadImg',
 
     // 自定义配置 filename
-    uploadFileName: '',
+    uploadFileName: 'updImg',
 
     // 上传图片的自定义参数
     uploadImgParams: {
@@ -685,14 +685,12 @@ var config = {
 
     // 上传图片 hook 
     uploadImgHooks: {
-        // customInsert: function (insertLinkImg, result, editor) {
-        //     console.log('customInsert')
-        //     // 图片上传并返回结果，自定义插入图片的事件，而不是编辑器自动插入图片
-        //     const data = result.data1 || []
-        //     data.forEach(link => {
-        //         insertLinkImg(link)
-        //     })
-        // },
+        customInsert: function (insertImg, result, editor) {
+            console.log('图片上传并返回结果')
+            // 图片上传并返回结果，自定义插入图片的事件，而不是编辑器自动插入图片
+            var url = result.url[0];                
+            insertImg(url);
+        },
         before: function before(xhr, editor, files) {
             // 图片上传之前触发
 
@@ -703,16 +701,19 @@ var config = {
             // }
         },
         success: function success(xhr, editor, result) {
-            // 图片上传并返回结果，图片插入成功之后触发
+            console.log('图片上传并返回结果,图片插入成功');
         },
         fail: function fail(xhr, editor, result) {
             // 图片上传并返回结果，但图片插入错误时触发
+            console.log('图片上传并返回结果，但图片插入错误');
         },
         error: function error(xhr, editor) {
             // 图片上传出错时触发
+            console.log('图片上传出错');
         },
         timeout: function timeout(xhr, editor) {
             // 图片上传超时时触发
+            console.log('图片上传超时');
         }
     },
 
@@ -2669,16 +2670,21 @@ Image.prototype = {
     _createEditPanel: function _createEditPanel() {
         var editor = this.editor;
 
-        // id
+        // id 
         var width30 = getRandom('width-30');
+        var width40 = getRandom('width-40');
         var width50 = getRandom('width-50');
+        var width60 = getRandom('width-60');
+        var width70 = getRandom('width-70');
+        var width80 = getRandom('width-80');
+        var width90 = getRandom('width-90');
         var width100 = getRandom('width-100');
         var delBtn = getRandom('del-btn');
 
         // tab 配置
         var tabsConfig = [{
             title: '编辑图片',
-            tpl: '<div>\n                    <div class="w-e-button-container" style="border-bottom:1px solid #f1f1f1;padding-bottom:5px;margin-bottom:5px;">\n                        <span style="float:left;font-size:14px;margin:4px 5px 0 5px;color:#333;">\u6700\u5927\u5BBD\u5EA6\uFF1A</span>\n                        <button id="' + width30 + '" class="left">30%</button>\n                        <button id="' + width50 + '" class="left">50%</button>\n                        <button id="' + width100 + '" class="left">100%</button>\n                    </div>\n                    <div class="w-e-button-container">\n                        <button id="' + delBtn + '" class="gray left">\u5220\u9664\u56FE\u7247</button>\n                    </dv>\n                </div>',
+            tpl: '<div>\n                    <div class="w-e-button-container" style="border-bottom:1px solid #f1f1f1;padding-bottom:5px;margin-bottom:5px;">\n                        <span style="font-size:14px;margin:4px 5px 0 5px;color:#333;float:left;width:100%">\u6700\u5927\u5BBD\u5EA6\uFF1A</span>\n                        <span style="float:left;width:100%">\n<button id="' + width30 + '" class="left">30%</button>\n                    <button id="' + width40 + '" class="left">40%</button>\n                    <button id="' + width50 + '" class="left">50%</button>\n                    <button id="' + width60 + '" class="left">60%</button>\n                    </span>                 <span  style="float:left;width:100%"><button id="' + width70 + '" class="left">70%</button>\n   <button id="' + width80 + '" class="left">80%</button>\n                    <button id="' + width90 + '" class="left">90%</button>\n                    <button id="' + width100 + '" class="left">100%</button>\n                    </span></div>\n                    <div class="w-e-button-container">\n                        <button id="' + delBtn + '" class="gray left">\u5220\u9664\u56FE\u7247</button>\n                    </dv>\n                </div>',
             events: [{
                 selector: '#' + width30,
                 type: 'click',
@@ -2691,12 +2697,67 @@ Image.prototype = {
                     return true;
                 }
             }, {
+                selector: '#' + width40,
+                type: 'click',
+                fn: function fn() {
+                    var $img = editor._selectedImg;
+                    if ($img) {
+                        $img.css('max-width', '40%');
+                    }
+                    // 返回 true，表示该事件执行完之后，panel 要关闭。否则 panel 不会关闭
+                    return true;
+                }
+            }, {
                 selector: '#' + width50,
                 type: 'click',
                 fn: function fn() {
                     var $img = editor._selectedImg;
                     if ($img) {
                         $img.css('max-width', '50%');
+                    }
+                    // 返回 true，表示该事件执行完之后，panel 要关闭。否则 panel 不会关闭
+                    return true;
+                }
+            }, {
+                selector: '#' + width60,
+                type: 'click',
+                fn: function fn() {
+                    var $img = editor._selectedImg;
+                    if ($img) {
+                        $img.css('max-width', '60%');
+                    }
+                    // 返回 true，表示该事件执行完之后，panel 要关闭。否则 panel 不会关闭
+                    return true;
+                }
+            }, {
+                selector: '#' + width70,
+                type: 'click',
+                fn: function fn() {
+                    var $img = editor._selectedImg;
+                    if ($img) {
+                        $img.css('max-width', '70%');
+                    }
+                    // 返回 true，表示该事件执行完之后，panel 要关闭。否则 panel 不会关闭
+                    return true;
+                }
+            }, {
+                selector: '#' + width80,
+                type: 'click',
+                fn: function fn() {
+                    var $img = editor._selectedImg;
+                    if ($img) {
+                        $img.css('max-width', '80%');
+                    }
+                    // 返回 true，表示该事件执行完之后，panel 要关闭。否则 panel 不会关闭
+                    return true;
+                }
+            }, {
+                selector: '#' + width90,
+                type: 'click',
+                fn: function fn() {
+                    var $img = editor._selectedImg;
+                    if ($img) {
+                        $img.css('max-width', '90%');
                     }
                     // 返回 true，表示该事件执行完之后，panel 要关闭。否则 panel 不会关闭
                     return true;
