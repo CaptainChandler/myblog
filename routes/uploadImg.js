@@ -14,8 +14,8 @@ routers.post('/', function(req, res, next){
 
   form.uploadDir = dir;
   form.parse(req, function(err, fields, files){
-    let oldPath = files.updImg.path;
-    let picname = files.updImg.name;
+    let oldPath = files.myFile.path;
+    let picname = files.myFile.name;
 
     let newPath = dir + picname;
     fs.rename(oldPath, newPath, function(err){

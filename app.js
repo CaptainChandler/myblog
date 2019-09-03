@@ -25,6 +25,7 @@ var hideblogRouter = require('./routes/hideblog');
 var blogdetailRouter = require('./routes/blogdetail');
 var commentRouter = require('./routes/comment');
 var uploadimgRouter = require('./routes/uploadImg');
+var uploadvideoRouter = require('./routes/uploadVideo');
 
 var app = express();
 var server = require('http').Server(app);
@@ -122,6 +123,7 @@ app.use('/hideblog', hideblogRouter);
 app.use('/blogdetail', blogdetailRouter);
 app.use('/comment', commentRouter);
 app.use('/uploadImg', uploadimgRouter);
+app.use('/uploadvideo', uploadvideoRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
