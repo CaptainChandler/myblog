@@ -41,7 +41,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    maxAge: 1000 * 20 * 60,
+    maxAge: 1000 * 60 * 60  * 24,
   },
   rolling: true,
   store: new sessionStore({
@@ -53,9 +53,12 @@ app.use(session({
 // app.use(rewrite(/^\/space/, '/myblog/$1'));
 
 app.use(function(req, res, next){ 
-  // console.log(req.url);
+
+  // //single user switch
+  // req.session.login = '1';
 
   if(req.url.includes('.js') || req.url.includes('.css') || req.url.includes('.png') || req.url.includes('.jpg')){
+
     next();
   }
 
@@ -67,25 +70,31 @@ app.use(function(req, res, next){
 
     //访问博客
     if(req.url.includes("/space")){
+
       let blogname = arr[2];
       // console.log(blogname);
       req.session.blogname = blogname;
       res.redirect('/myblog?blogname=' + blogname);
     }else if(req.url.includes("/comment") || req.url.includes("/myblog") || req.url.includes("/blogdetail")){
+      
       next();  
     }else{
     
-      if(req.session.login === '1'){      
+      if(req.session.login === '1'){   
+
         next();
       } else{
 
         for(var i=0, length=arr.length; i<length; i++){
+
           arr[i] = arr[i].split("?")[0];
         }
 
         if(!(arr.length>=2 && arr[0]=='' && (arr[1]=='register' || arr[1]=='login' || arr[1]==''))){
+
           res.redirect('/login');
         } else{
+
           next();
         }
 
@@ -94,6 +103,8 @@ app.use(function(req, res, next){
   }
 });
 
+
+
 // view engine setup
 
 app.set('views', path.join(__dirname, 'views'));
@@ -101,8 +112,8 @@ app.engine('html', ejs.__express);
 app.set('view engine', 'html');
 
 app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.json({limit: '50mb'}));
+app.use(express.urlencoded({limit: '50mb'}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 

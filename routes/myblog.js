@@ -3,7 +3,8 @@ var routers = express.Router();
 var Blog = require('../model/blog');
 var Profile = require('../model/profile');
 
-routers.get('/', function(req, res, next) {    
+routers.get('/', function(req, res, next) {  
+    
   let domainname = req.query.blogname;  
   req.session.domainname = domainname;
 
@@ -37,7 +38,6 @@ routers.post('/getallarticles', function(req, res, next) {
   // 这个页面接收一个参数，页面
   var page = req.query.page;
 
-
   let strSearch;
 
   if(req.session.mydomainname === req.session.domainname && req.session.login === "1") {
@@ -63,8 +63,8 @@ routers.post('/getallarticles', function(req, res, next) {
 
 
 routers.post('/getAmount', function(req, res, next) {   
+  
   var blog = new Blog({});
-
   var username = req.session.accessor;
 
   let strSearch;

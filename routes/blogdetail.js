@@ -7,9 +7,7 @@ var moment = require('moment');
 routers.get('/', function(req, res, next){
   var blog = new Blog({});
   var comments = new Comments({});
-
   var subjectid = req.query.subjectid;
-
   var detail = [];
   
   req.session.subjectid = subjectid;
@@ -39,8 +37,5 @@ routers.get('/', function(req, res, next){
   });
 
 });
-
-
-
 
 module.exports = routers; 

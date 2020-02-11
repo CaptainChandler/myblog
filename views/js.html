@@ -9,12 +9,16 @@
 
         <script type="text/javascript">
                 $(window).load(function(){
-                  var domainname = "<%= session.mydomainname%>";
+                  var domainname = "<%= session.domainname%>";
                   if(domainname == ""){
             
+                    document.getElementById("liforcompose").style.display = "none";
+                    document.getElementById("liforbloglist").style.display = "none";
                     document.getElementById("liformyblog").style.display = "none";
                   }
                   else{
+                    document.getElementById("liforbloglist").style.display = "inline";
+                    document.getElementById("liforcompose").style.display = "inline";
                     document.getElementById("liformyblog").style.display = "inline";
                   }
                 });

@@ -8,7 +8,7 @@
       </div>
 
       <div class="row">
-        <div class="col-sm-8 blog-main">
+        <div class="col-sm-9 blog-main">
           <!-- blog post -->
           <div id="blogpost">
 
@@ -32,7 +32,6 @@
           </script>
 
           <script type="text/javascript">
-            // var blogpost = $("blogpost");
             var compiled = _.template($("#model").html());
             getPage(0);
 
@@ -46,8 +45,7 @@
                   "async": false,
                   "success": function (data) {
                       
-                      //result是一个数组
-                      //console.log(Array.isArray(result));
+                      //result是一个数组                      
                       iterator(0);
                       //迭代器
                       function iterator(i) {
@@ -98,7 +96,7 @@
       </nav>
       <script type="text/javascript">
         // 分页条的Ajax
-        $.get('/myblog/getAmount', function(result) {
+        $.post('/myblog/getAmount', function(result) {
           var amount = parseInt(result);
           // 总页数
           pageamount = Math.ceil(amount / 5);
@@ -131,8 +129,7 @@
           </div>
           <div class="sidebar-module">
             <h4></h4>
-            <ol class="list-unstyled">
-              
+            <ol class="list-unstyled">              
             </ol>
           </div>
         </div><!-- /.blog-sidebar -->
