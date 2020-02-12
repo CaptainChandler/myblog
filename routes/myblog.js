@@ -55,6 +55,12 @@ routers.post('/getallarticles', function(req, res, next) {
         console.log('DB:there has been a error,refer info as below ' + err);
      }
      else{
+
+      for(i=0; i<rnt.length; i++) {
+        rnt[i].postbody = rnt[i].postbody.replace(/<p>/g, "<p style='white-space:pre-wrap;word-wrap:break-word; '>");
+        // console.log(rnt[i].postbody.replace(/<p>/g, "<p style='word-wrap:break-word;'>"));
+      }
+      
       res.send({status: 'success', result: rnt});
      }
   });    

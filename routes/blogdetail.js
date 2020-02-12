@@ -25,7 +25,7 @@ routers.get('/', function(req, res, next){
 
       detail.subject = rtn[0].subject;
       // detail.subjectid = rtn[0].subjectid;
-      detail.postbody = rtn[0].postbody;
+      detail.postbody = rtn[0].postbody.replace(/<p>/g, "<p style='white-space:pre-wrap;word-wrap:break-word; '>");
       detail.author = rtn[0].author;
       detail.ctime = moment(rtn[0].ctime).format("YYYY-MM-DD hh:mm:ss");
       detail.visible = rtn[0].visible;
