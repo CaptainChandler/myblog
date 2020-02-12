@@ -63,9 +63,10 @@
                             }                            
                           }); 
                           var posttime = new Date(data.result[i].ctime);
-                          // alert(posttime.Format("yyyy-MM-dd hh:mm:ss"));
-                          data.result[i].ctime =posttime.getFullYear() + "-" + fillZero(posttime.getMonth())+ "-" + 
-                                fillZero(posttime.getDay()) + " " + fillZero(posttime.getHours()) + ":" + 
+                          // alert(posttime);
+                          // alert(posttime.getMonth());
+                          data.result[i].ctime =posttime.getFullYear() + "-" + fillZero(posttime.getMonth()+1)+ "-" + 
+                                fillZero(posttime.getDate()) + " " + fillZero(posttime.getHours()) + ":" + 
                                 fillZero(posttime.getMinutes()) + ":" + fillZero(posttime.getSeconds());
 
                           if(data.result[i].visible == 0) {
