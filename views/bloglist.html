@@ -87,8 +87,8 @@
 
           function formatTime(str){
             return str.getFullYear() + "/" 
-                              + fillZero(str.getMonth())  + "/" 
-                              +  fillZero(str.getDay())  + " " 
+                              + fillZero(str.getMonth()+1)  + "/" 
+                              +  fillZero(str.getDate())  + " " 
                               +  fillZero(str.getHours())  + ":" 
                               +  fillZero(str.getMinutes())  + ":" 
                               +  fillZero(str.getSeconds());
