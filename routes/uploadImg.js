@@ -17,7 +17,7 @@ routers.post('/', function(req, res, next){
     let oldPath = files.myFile.path;
     let picname = files.myFile.name;
 
-    // let picname = moment(new Date()).format('YYYYMMDDHHmmss').toString();
+   picname = moment(new Date()).format('YYYYMMDDHHmmss').toString();
     
     let newPath = dir + picname;
     // console.log(__dirname);
@@ -25,9 +25,7 @@ routers.post('/', function(req, res, next){
     // let base64pic =  Buffer.from(bitpic, "binary").toString("base64");
     // console.log(base64pic);
 
-    // //del temp pic from server
-    // let abPath = __dirname.substring(0,13) + oldPath; 
-    // fs.unlinkSync(abPath);
+    
     
     fs.rename(oldPath, newPath, function(err){
       if(err){
@@ -37,6 +35,15 @@ routers.post('/', function(req, res, next){
       res.send({isOK: true, url: [resPath]});
     
     });
+
+    // //del temp pic from server
+    // let tmp = __dirname.split('/');
+    // let abPath = tmp[0];
+    // for(var i=1; i<tmp.length-1; i++) {
+    //   abPath = abPath + '/' + tmp[i];
+    // }
+    // abPath = abPath + '/' + oldPath; 
+    // fs.unlinkSync(abPath);
 
     // res.send({isOK: true, url: ["data:image/jpg;base64," + base64pic]});
     
