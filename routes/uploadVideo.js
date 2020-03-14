@@ -22,7 +22,7 @@ routers.post('/', function(req, res, next){
       if(err){
         res.send({isOK: false, err});
       }
-      let resPath = newPath.replace("./public", "http://localhost:3000");
+      let resPath = newPath.replace("./public", "http://127.0.0.1:3000");
       res.send({isOK: true, url: [resPath]});
     });
   })
