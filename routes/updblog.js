@@ -33,12 +33,14 @@ routers.post('/', function(req, res, next) {
 
   let postbody = req.body.postbody;
   let subjectid = req.session.subjectid;
+  let subject = req.body.subject;
 
   let updtime = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
 
   let flg = false;
 
   var strUpd = {
+    subject: subject,
     postbody: postbody,
     utime: updtime
   }
